@@ -1,5 +1,5 @@
-import React from 'react';
-import cx from 'classnames';
+import React from "react";
+import cx from "classnames";
 
 export type TooltipProps = {
   /** Tooltip content. */
@@ -29,18 +29,19 @@ export type TooltipProps = {
    * - create a CSS selector like: `.visx-tooltip { position: 'absolute' }`
    */
   unstyled?: boolean;
+  containerRef?: React.RefObject<HTMLElement>;
 };
 
 export const defaultStyles: React.CSSProperties = {
-  position: 'absolute',
-  backgroundColor: 'white',
-  color: '#666666',
-  padding: '.3rem .5rem',
-  borderRadius: '3px',
-  fontSize: '14px',
-  boxShadow: '0 1px 2px rgba(33,33,33,0.2)',
-  lineHeight: '1em',
-  pointerEvents: 'none',
+  position: "absolute",
+  backgroundColor: "white",
+  color: "#666666",
+  padding: ".3rem .5rem",
+  borderRadius: "3px",
+  fontSize: "14px",
+  boxShadow: "0 1px 2px rgba(33,33,33,0.2)",
+  lineHeight: "1em",
+  pointerEvents: "none",
 };
 
 export default function Tooltip({
@@ -57,11 +58,11 @@ export default function Tooltip({
 }: TooltipProps & React.HTMLProps<HTMLDivElement>) {
   return (
     <div
-      className={cx('visx-tooltip', className)}
+      className={cx("visx-tooltip", className)}
       style={{
         top: top == null || offsetTop == null ? top : top + offsetTop,
         left: left == null || offsetLeft == null ? left : left + offsetLeft,
-        ...(applyPositionStyle && { position: 'absolute' }),
+        ...(applyPositionStyle && { position: "absolute" }),
         ...(!unstyled && style),
       }}
       {...restProps}

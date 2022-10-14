@@ -1,6 +1,6 @@
 /* eslint react/no-did-mount-set-state: 0, react/no-find-dom-node: 0 */
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React from "react";
+import ReactDOM from "react-dom";
 
 const emptyRect = {
   top: 0,
@@ -24,13 +24,17 @@ export type WithBoundingRectsProps = {
   getRects?: () => { rect: rectShape; parentRect: rectShape };
   rect?: rectShape;
   parentRect?: rectShape;
+  ref?: React.RefObject<HTMLElement>;
+  spice?: string;
 };
 
 export default function withBoundingRects<Props extends object = {}>(
-  BaseComponent: React.ComponentType<Props>,
+  BaseComponent: React.ComponentType<Props>
 ) {
   return class WrappedComponent extends React.PureComponent<Props> {
-    static displayName = `withBoundingRects(${BaseComponent.displayName || ''})`;
+    static displayName = `withBoundingRects(${
+      BaseComponent.displayName || ""
+    })`;
     node: HTMLElement | undefined | null;
     constructor(props: Props) {
       super(props);
@@ -42,7 +46,11 @@ export default function withBoundingRects<Props extends object = {}>(
     }
 
     componentDidMount() {
-      this.node = ReactDOM.findDOMNode(this) as HTMLElement;
+      this.node =
+        false && this.props.containerRef.current
+          ? this.props.containerRef.current.parentNode
+          : (ReactDOM.findDOMNode(this) as HTMLElement);
+      console.log("base moungin: ", this.node);
       this.setState(() => this.getRects());
     }
 
@@ -52,7 +60,9 @@ export default function withBoundingRects<Props extends object = {}>(
       const { node } = this;
       const parentNode = node.parentNode as HTMLElement | null;
 
-      const rect = node.getBoundingClientRect ? node.getBoundingClientRect() : emptyRect;
+      const rect = node.getBoundingClientRect
+        ? node.getBoundingClientRect()
+        : emptyRect;
 
       const parentRect = parentNode?.getBoundingClientRect
         ? parentNode.getBoundingClientRect()
@@ -62,7 +72,13 @@ export default function withBoundingRects<Props extends object = {}>(
     }
 
     render() {
-      return <BaseComponent getRects={this.getRects} {...this.state} {...this.props} />;
+      return (
+        <BaseComponent
+          getRects={this.getRects}
+          {...this.state}
+          {...this.props}
+        />
+      );
     }
   };
 }

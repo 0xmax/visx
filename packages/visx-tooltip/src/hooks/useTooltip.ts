@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback } from "react";
 
 export type UseTooltipParams<TooltipData> = {
   tooltipOpen: boolean;
@@ -8,20 +8,25 @@ export type UseTooltipParams<TooltipData> = {
   updateTooltip: (args: UpdateTooltipArgs<TooltipData>) => void;
   showTooltip: (args: ShowTooltipArgs<TooltipData>) => void;
   hideTooltip: () => void;
+  containerRef?: React.RefObject<HTMLElement>;
 };
 type UseTooltipState<TooltipData> = Pick<
   UseTooltipParams<TooltipData>,
-  'tooltipOpen' | 'tooltipLeft' | 'tooltipTop' | 'tooltipData'
+  "tooltipOpen" | "tooltipLeft" | "tooltipTop" | "tooltipData"
 >;
 type ValueOrFunc<T> = T | ((t: T) => T);
-type ShowTooltipArgs<TooltipData> = ValueOrFunc<Omit<UseTooltipState<TooltipData>, 'tooltipOpen'>>;
+type ShowTooltipArgs<TooltipData> = ValueOrFunc<
+  Omit<UseTooltipState<TooltipData>, "tooltipOpen">
+>;
 type UpdateTooltipArgs<TooltipData> = ValueOrFunc<UseTooltipState<TooltipData>>;
 
 export default function useTooltip<TooltipData = {}>(
   /** Optional initial TooltipState. */
-  initialTooltipState?: Partial<UseTooltipParams<TooltipData>>,
+  initialTooltipState?: Partial<UseTooltipParams<TooltipData>>
 ): UseTooltipParams<TooltipData> {
-  const [tooltipState, setTooltipState] = useState<UseTooltipState<TooltipData>>({
+  const [tooltipState, setTooltipState] = useState<
+    UseTooltipState<TooltipData>
+  >({
     tooltipOpen: false,
     ...initialTooltipState,
   });
@@ -29,16 +34,19 @@ export default function useTooltip<TooltipData = {}>(
   const showTooltip = useCallback(
     (showArgs: ShowTooltipArgs<TooltipData>) =>
       setTooltipState(
-        typeof showArgs === 'function'
-          ? ({ tooltipOpen, ...show }) => ({ ...showArgs(show), tooltipOpen: true })
+        typeof showArgs === "function"
+          ? ({ tooltipOpen, ...show }) => ({
+              ...showArgs(show),
+              tooltipOpen: true,
+            })
           : {
               tooltipOpen: true,
               tooltipLeft: showArgs.tooltipLeft,
               tooltipTop: showArgs.tooltipTop,
               tooltipData: showArgs.tooltipData,
-            },
+            }
       ),
-    [setTooltipState],
+    [setTooltipState]
   );
 
   const hideTooltip = useCallback(
@@ -49,7 +57,7 @@ export default function useTooltip<TooltipData = {}>(
         tooltipTop: undefined,
         tooltipData: undefined,
       }),
-    [setTooltipState],
+    [setTooltipState]
   );
 
   return {

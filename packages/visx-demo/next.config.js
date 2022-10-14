@@ -6,6 +6,7 @@ const isProd = process.env.NODE_ENV === "production";
 module.exports = {
   basePath: isProd ? "/visx" : "",
   assetPrefix: isProd ? "/visx/" : "",
+  reactStrictMode: true,
   typescript: {
     // enable rendering when there are type errors
     ignoreDevErrors: true,
