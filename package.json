@@ -45,7 +45,7 @@
     "lint": "nimbus eslint",
     "lint:fix": "yarn run lint --fix",
     "prepare-release": "git checkout master && git pull --rebase origin master && lerna updated",
-    "prepare" : "yarn run build",
+    "prepare" : "yarn run release",
     "prettier": "nimbus prettier",
     "release": "yarn run prepare-release && lerna publish --exact",
     "setup": "yarn run build",
